@@ -30,9 +30,9 @@ namespace NzbDrone.Core.HealthCheck.Checks
                 return new HealthCheck(GetType(), HealthCheckResult.Error, $"Your Mono version {monoVersion} has a bug that causes issues connecting to indexers/download clients. You should upgrade to a higher version");
             }
 
-            if (monoVersion >= new Version("4.4.2"))
+            if (monoVersion >= new Version("4.8.0"))
             {
-                _logger.Debug("Mono version is 4.4.2 or better: {0}", monoVersion);
+                _logger.Debug("Mono version is 4.8.0 or better: {0}", monoVersion);
                 return new HealthCheck(GetType());
             }
 
