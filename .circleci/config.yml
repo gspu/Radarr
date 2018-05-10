@@ -1,9 +1,12 @@
 version: 2
 
+defaults: &defaults
+  docker:
+    - image: gallileo/radarr-cci-primary:5.8
+
 jobs:
     build:
-        docker:
-            - image: gallileo/radarr-cci-primary:5.8
+        <<: *defaults
         steps:
             - checkout
             - run: git submodule update --init --recursive
@@ -25,17 +28,15 @@ jobs:
             - run:
                 name: Preparing Tests
                 command: mkdir -p _tests/reports/junit && mkdir -p ../.config/Radarr && chmod -R 777 ../.config
-            - run:
-                name: Unit Tests
-                command: ./test.sh Linux Unit
-            - run:
-                name: Copy Binaries for Integration Tests
-                command: cp -R _output_mono/ _tests/bin
-            - run:
-                name: Integration Tests
-                command: ./test.sh Linux Integration
-            - store_test_results:
-                path: _tests/reports/
+            - persist_to_workspace:
+                root: .
+                # Must be relative path from root
+                paths:
+                    - _output
+                    - _output_mono
+                    - _output_osx
+                    - _output_osx_app
+                    - _tests
             - store_artifacts:
                 path: _output
             - store_artifacts:
@@ -46,3 +47,43 @@ jobs:
                 path: _output_osx_app
             - store_artifacts:
                 path: _tests/reports/junit/results.xml
+    unit_tests:
+        <<: *defaults
+        steps:
+            - attach_workspace:
+              # Must be absolute path or relative path from working_directory
+              at: .
+            - run:
+                name: Unit Tests
+                command: ./test.sh Linux Unit
+            - store_test_results:
+                path: _tests/reports/
+                
+    integration_tests:
+        <<: *defaults
+        steps:
+            - attach_workspace:
+              # Must be absolute path or relative path from working_directory
+              at: .
+            - run:
+                name: Copy Binaries for Integration Tests
+                command: cp -R _output_mono/ _tests/bin
+            - run:
+                name: Integration Tests
+                command: ./test.sh Linux Integration
+            - store_test_results:
+                path: _tests/reports/
+                
+workflows:
+    version: 2
+
+    build_and_test:
+        jobs:
+            - build
+            - unit_tests:
+                requires:
+                    - build
+                    - build
+            - integration_tests:
+                requires:
+                    - build
