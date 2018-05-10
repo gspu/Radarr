@@ -45,8 +45,9 @@ namespace NzbDrone.Test.Common
             }
             else
             {
-                Console.WriteLine(TestContext.CurrentContext.TestDirectory);
-                Console.WriteLine(System.Environment.CurrentDirectory);
+                LogManager.GetLogger("Integration").Warn("TestDir: {}, currentdir: {}", TestContext.CurrentContext.TestDirectory, System.Environment.CurrentDirectory);
+                Console.Error.WriteLine(TestContext.CurrentContext.TestDirectory);
+                Console.Error.WriteLine(System.Environment.CurrentDirectory);
                 Start(Path.Combine(TestContext.CurrentContext.TestDirectory, nzbdroneConsoleExe));
             }
 
