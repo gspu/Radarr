@@ -29,6 +29,9 @@ jobs:
                 name: Unit Tests
                 command: ./test.sh Linux Unit
             - run:
+                name: Copy Binaries for Integration Tests
+                command: cp -R _output_mono/ _tests/bin
+            - run:
                 name: Integration Tests
                 command: ./test.sh Linux Integration
             - store_test_results:
