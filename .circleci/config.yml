@@ -37,6 +37,7 @@ jobs:
                     - _output_osx
                     - _output_osx_app
                     - _tests
+                    - .circleci
             - store_artifacts:
                 path: _output
             - store_artifacts:
