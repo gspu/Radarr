@@ -51,8 +51,7 @@ jobs:
         <<: *defaults
         steps:
             - attach_workspace:
-              # Must be absolute path or relative path from working_directory
-              at: .
+                at: .
             - run:
                 name: Unit Tests
                 command: ./test.sh Linux Unit
@@ -63,8 +62,7 @@ jobs:
         <<: *defaults
         steps:
             - attach_workspace:
-              # Must be absolute path or relative path from working_directory
-              at: .
+                at: .
             - run:
                 name: Copy Binaries for Integration Tests
                 command: cp -R _output_mono/ _tests/bin
