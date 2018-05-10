@@ -54,7 +54,7 @@ jobs:
                 at: .
             - run:
                 name: Unit Tests
-                command: ./test.sh Linux Unit
+                command: ./_tests/test.sh Linux Unit
             - store_test_results:
                 path: _tests/reports/
                 
@@ -68,7 +68,7 @@ jobs:
                 command: cp -R _output_mono/ _tests/bin
             - run:
                 name: Integration Tests
-                command: ./test.sh Linux Integration
+                command: ./_tests/test.sh Linux Integration
             - store_test_results:
                 path: _tests/reports/
                 
